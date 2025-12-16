@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ระบบดูข้อมูลออนไลน์</title>
+<style>
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  margin: 0;
+  background: #fff;
+}
+header {
+  padding: 10px;
+  background: #2b579a;
+  color: white;
+  font-size: 18px;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+th {
+  background: #f3f3f3;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+img {
+  width: 80px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.85);
+  align-items: center;
+  justify-content: center;
+}
+.modal img {
+  max-width: 95%;
+  max-height: 95%;
+}
+</style>
+</head>
+<body>
+
+<header>📊 ระบบดูข้อมูล (คล้าย Excel ออนไลน์)</header>
+
+<table>
+  <thead>
+    <tr>
+      <th>รหัส</th>
+      <th>ชื่อ</th>
+      <th>รายละเอียด</th>
+      <th>รูปภาพ</th>
+    </tr>
+  </thead>
+  <tbody id="tbody"></tbody>
+</table>
+
+<div class="modal" id="modal" onclick="this.style.display='none'">
+  <img id="modalImg">
+</div>
+
+<script>
+fetch('data.json')
+.then(res => res.json())
+.then(data => {
+  const tb = document.getElementById('tbody');
+  data.forEach(r => {
+    tb.innerHTML += `
+      <tr>
+        <td>${r.code}</td>
+        <td>${r.name}</td>
+        <td>${r.detail}</td>
+        <td>
+          <img loading="lazy" src="${r.image}" onclick="showImg('${r.image}')">
+        </td>
+      </tr>
+    `;
+  });
+});
+
+function showImg(src) {
+  document.getElementById('modalImg').src = src;
+  document.getElementById('modal').style.display = 'flex';
+}
+</script>
+
+</body>
+</html>
